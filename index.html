@@ -11,46 +11,51 @@
         <h1>Note Recognition Game</h1>
         
         <div class="game-card">
-            <div class="score-display">
-                <span>Score: <span id="score">0</span></span>
-                <span>Streak: <span id="streak">0</span></span>
-            </div>
-            
-            <div class="range-selector">
-                <h3>Practice Range</h3>
-                <div class="range-controls">
-                    <div class="control-group">
-                        <label for="startNote">From:</label>
-                        <select id="startNote">
-                            <option value="C2">C2</option>
-                            <option value="C3">C3</option>
-                            <option value="C4" selected>C4</option>
-                            <option value="C5">C5</option>
-                        </select>
-                    </div>
-                    <div class="control-group">
-                        <label for="endNote">To:</label>
-                        <select id="endNote">
-                            <option value="C3">C3</option>
-                            <option value="C4">C4</option>
-                            <option value="C5" selected>C5</option>
-                            <option value="C6">C6</option>
-                        </select>
-                    </div>
-                    <div class="control-group">
-                        <label for="includeSharps">
-                            <input type="checkbox" id="includeSharps">
-                            Include sharps/flats
-                        </label>
+            <div class="notation-container">
+                <div class="range-selector">
+                    <h3>Practice Range</h3>
+                    <div class="range-controls">
+                        <div class="control-group">
+                            <label for="startNote">From:</label>
+                            <select id="startNote">
+                                <option value="C2">C2</option>
+                                <option value="C3">C3</option>
+                                <option value="C4" selected>C4</option>
+                                <option value="C5">C5</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="endNote">To:</label>
+                            <select id="endNote">
+                                <option value="C3">C3</option>
+                                <option value="C4">C4</option>
+                                <option value="C5" selected>C5</option>
+                                <option value="C6">C6</option>
+                            </select>
+                        </div>
+                        <div class="control-group">
+                            <label for="includeSharps">
+                                <input type="checkbox" id="includeSharps">
+                                Include sharps/flats
+                            </label>
+                        </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="notation-container">
                 <div id="notation"></div>
             </div>
             
             <div class="feedback" id="feedback"></div>
+            
+            <div class="score-display">
+                <div class="score-item">
+                    <span class="score-label">Score</span>
+                    <span class="score-value" id="score">0</span>
+                </div>
+                <div class="score-item">
+                    <span class="score-label">Streak</span>
+                    <span class="score-value" id="streak">0</span>
+                </div>
+            </div>
             
             <div class="piano-container">
                 <div class="piano" id="piano">

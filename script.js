@@ -82,11 +82,14 @@ class NoteRecognitionGame {
             let abcNote = noteBase;
             
             // In ABC notation:
+            // C2 = C,, (two octaves below middle C)
+            // C3 = C, (one octave below middle C)
             // C4 (middle C) = C
-            // C5 = c
-            // C6 = c'
-            // C3 = C,
-            if (octave === 3) {
+            // C5 = c (one octave above middle C)
+            // C6 = c' (two octaves above middle C)
+            if (octave === 2) {
+                abcNote = abcNote.toUpperCase() + ',,';
+            } else if (octave === 3) {
                 abcNote = abcNote.toUpperCase() + ',';
             } else if (octave === 4) {
                 abcNote = abcNote.toUpperCase();
@@ -186,10 +189,8 @@ ${abcNote}4`;
     }
     
     checkAnswer(clickedNote) {
-        const currentNoteWithoutOctave = this.currentNote.replace(/\d/, '');
-        const clickedNoteWithoutOctave = clickedNote.replace(/\d/, '');
-        
-        return currentNoteWithoutOctave === clickedNoteWithoutOctave;
+        // Require exact match including octave
+        return clickedNote === this.currentNote;
     }
     
     highlightKey(keyElement, isCorrect) {
@@ -241,13 +242,12 @@ ${abcNote}4`;
     }
     
     showHint() {
-        // Find all keys that match the current note (any octave)
-        const currentNoteWithoutOctave = this.currentNote.replace(/\d/, '');
+        // Find the exact key that matches the current note (including octave)
         const matchingKeys = document.querySelectorAll('.key');
         
         matchingKeys.forEach(key => {
             const keyNote = key.dataset.note;
-            if (keyNote && keyNote.replace(/\d/, '') === currentNoteWithoutOctave) {
+            if (keyNote === this.currentNote) {
                 key.classList.add('hint');
             }
         });
@@ -285,17 +285,28 @@ ${abcNote}4`;
         this.notes = availableNotes.filter(note => {
             const noteOctave = parseInt(note.slice(-1));
             const noteName = note.slice(0, -1);
+            const endNoteName = endNote.slice(0, -1);
             
             // Handle exact octave boundaries
             if (noteOctave === startOctave && noteOctave === endOctave) {
                 // Both start and end in same octave
-                return noteName >= startNote.slice(0, -1) && noteName <= endNote.slice(0, -1);
+                const noteOrder = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+                const startIndex = noteOrder.indexOf(startNote.slice(0, -1));
+                const endIndex = noteOrder.indexOf(endNoteName);
+                const noteIndex = noteOrder.indexOf(noteName);
+                return noteIndex >= startIndex && noteIndex <= endIndex;
             } else if (noteOctave === startOctave) {
-                // In start octave
-                return noteName >= startNote.slice(0, -1);
+                // In start octave - from start note to B
+                return true;
             } else if (noteOctave === endOctave) {
-                // In end octave
-                return noteName <= endNote.slice(0, -1);
+                // In end octave - only up to the end note
+                if (endNoteName === 'C') {
+                    return noteName === 'C';
+                }
+                const noteOrder = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+                const endIndex = noteOrder.indexOf(endNoteName);
+                const noteIndex = noteOrder.indexOf(noteName);
+                return noteIndex >= 0 && noteIndex <= endIndex;
             } else {
                 // In between octaves
                 return noteOctave > startOctave && noteOctave < endOctave;
