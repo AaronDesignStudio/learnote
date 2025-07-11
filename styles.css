@@ -104,6 +104,7 @@ h1 {
     color: #f44336;
 }
 
+
 .piano-container {
     margin-bottom: 40px;
     overflow-x: auto;
@@ -255,6 +256,19 @@ h1 {
     100% { transform: scale(1); }
 }
 
+@keyframes hint-fade {
+    0%, 100% { 
+        opacity: 1;
+        box-shadow: 0 0 20px #4CAF50, 0 0 40px #4CAF50, inset 0 0 20px rgba(76, 175, 80, 0.3);
+        transform: scale(1);
+    }
+    50% { 
+        opacity: 0.8;
+        box-shadow: 0 0 10px #45a049, 0 0 20px #45a049, inset 0 0 10px rgba(69, 160, 73, 0.2);
+        transform: scale(0.98);
+    }
+}
+
 .key.glowing {
     animation: glow 2s ease-in-out infinite;
 }
@@ -265,6 +279,13 @@ h1 {
 
 .key.pulse {
     animation: pulse 0.3s ease;
+}
+
+.key.hint {
+    animation: hint-fade 1.5s ease-in-out infinite;
+    background: linear-gradient(to bottom, #4CAF50 0%, #45a049 100%) !important;
+    color: white !important;
+    z-index: 3;
 }
 
 @media (max-width: 768px) {

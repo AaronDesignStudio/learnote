@@ -4,6 +4,7 @@ class NoteRecognitionGame {
         this.streak = 0;
         this.currentNote = null;
         this.isWaitingForAnswer = true;
+        this.incorrectAttempts = 0;
         
         this.notes = [
             'C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4',
@@ -33,7 +34,9 @@ class NoteRecognitionGame {
     generateNewNote() {
         this.clearFeedback();
         this.clearNotation();
+        this.removeHints();
         this.isWaitingForAnswer = true;
+        this.incorrectAttempts = 0;
         document.getElementById('nextButton').disabled = true;
         
         const randomIndex = Math.floor(Math.random() * this.notes.length);
@@ -127,26 +130,43 @@ ${abcNote}4`;
         if (!this.isWaitingForAnswer) return;
         
         const clickedNote = event.target.dataset.note;
-        
-        // Play the clicked note sound
-        if (typeof audioEngine !== 'undefined') {
-            audioEngine.playNote(clickedNote);
-        }
-        
         const isCorrect = this.checkAnswer(clickedNote);
+        
+        // Play appropriate sound based on correctness
+        if (typeof audioEngine !== 'undefined') {
+            if (isCorrect) {
+                audioEngine.playNote(clickedNote);
+            } else {
+                audioEngine.playError();
+            }
+        }
         
         this.highlightKey(event.target, isCorrect);
         this.showFeedback(isCorrect);
-        this.updateScore(isCorrect);
         
-        this.isWaitingForAnswer = false;
-        document.getElementById('nextButton').disabled = false;
-        
-        // Auto advance to next note if correct
         if (isCorrect) {
+            this.updateScore(true);
+            this.isWaitingForAnswer = false;
+            document.getElementById('nextButton').disabled = false;
+            
+            // Auto advance to next note if correct
             setTimeout(() => {
                 this.generateNewNote();
             }, 1000);
+        } else {
+            // Wrong answer - increment attempts and check if we need to show hint
+            this.incorrectAttempts++;
+            this.updateScore(false);
+            
+            // Show hint after 2 incorrect attempts
+            if (this.incorrectAttempts >= 2) {
+                setTimeout(() => {
+                    this.showHint();
+                }, 500);
+            }
+            
+            // Keep waiting for the correct answer
+            this.isWaitingForAnswer = true;
         }
     }
     
@@ -202,6 +222,26 @@ ${abcNote}4`;
         const allKeys = document.querySelectorAll('.key');
         allKeys.forEach(key => {
             key.classList.remove('correct', 'incorrect');
+        });
+    }
+    
+    showHint() {
+        // Find all keys that match the current note (any octave)
+        const currentNoteWithoutOctave = this.currentNote.replace(/\d/, '');
+        const matchingKeys = document.querySelectorAll('.key');
+        
+        matchingKeys.forEach(key => {
+            const keyNote = key.dataset.note;
+            if (keyNote && keyNote.replace(/\d/, '') === currentNoteWithoutOctave) {
+                key.classList.add('hint');
+            }
+        });
+    }
+    
+    removeHints() {
+        const allKeys = document.querySelectorAll('.key');
+        allKeys.forEach(key => {
+            key.classList.remove('hint');
         });
     }
 }

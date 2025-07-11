@@ -91,6 +91,42 @@ class AudioEngine {
         oscillator.start(now);
         oscillator.stop(now + duration);
     }
+
+    playError() {
+        if (!this.audioContext) return;
+        
+        // Resume audio context if suspended
+        if (this.audioContext.state === 'suspended') {
+            this.audioContext.resume();
+        }
+        
+        const now = this.audioContext.currentTime;
+        const duration = 0.15;
+        
+        // Create oscillator for error sound
+        const oscillator = this.audioContext.createOscillator();
+        oscillator.type = 'sawtooth';
+        
+        // Create frequency sweep from 200Hz to 100Hz
+        oscillator.frequency.setValueAtTime(200, now);
+        oscillator.frequency.exponentialRampToValueAtTime(100, now + duration);
+        
+        // Create gain envelope
+        const gainNode = this.audioContext.createGain();
+        gainNode.gain.value = 0;
+        
+        // Connect nodes
+        oscillator.connect(gainNode);
+        gainNode.connect(this.compressor);
+        
+        // Apply envelope - quick attack and decay for buzzer effect
+        gainNode.gain.linearRampToValueAtTime(0.3, now + 0.01);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, now + duration);
+        
+        // Start and stop
+        oscillator.start(now);
+        oscillator.stop(now + duration);
+    }
 }
 
 // Export for use in other files
