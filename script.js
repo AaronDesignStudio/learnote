@@ -127,6 +127,12 @@ ${abcNote}4`;
         if (!this.isWaitingForAnswer) return;
         
         const clickedNote = event.target.dataset.note;
+        
+        // Play the clicked note sound
+        if (typeof audioEngine !== 'undefined') {
+            audioEngine.playNote(clickedNote);
+        }
+        
         const isCorrect = this.checkAnswer(clickedNote);
         
         this.highlightKey(event.target, isCorrect);
@@ -154,13 +160,17 @@ ${abcNote}4`;
     highlightKey(keyElement, isCorrect) {
         const allKeys = document.querySelectorAll('.key');
         allKeys.forEach(key => {
-            key.classList.remove('correct', 'incorrect');
+            key.classList.remove('correct', 'incorrect', 'shake', 'pulse');
         });
         
-        keyElement.classList.add(isCorrect ? 'correct' : 'incorrect');
+        if (isCorrect) {
+            keyElement.classList.add('correct', 'pulse');
+        } else {
+            keyElement.classList.add('incorrect', 'shake');
+        }
         
         setTimeout(() => {
-            keyElement.classList.remove('correct', 'incorrect');
+            keyElement.classList.remove('correct', 'incorrect', 'shake', 'pulse');
         }, 1000);
     }
     

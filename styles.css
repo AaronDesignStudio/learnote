@@ -119,6 +119,7 @@ h1 {
     width: fit-content;
     margin: 0 auto;
     height: 160px;
+    padding-top: 0;
 }
 
 .key {
@@ -157,11 +158,12 @@ h1 {
 
 .key.black {
     width: 28px;
-    height: 65%;
+    height: 100px;
     background: linear-gradient(to bottom, #333333 0%, #000000 100%);
     border-radius: 0 0 4px 4px;
     color: #ccc;
     position: absolute;
+    top: 0;
     z-index: 2;
     padding-bottom: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
@@ -178,16 +180,16 @@ h1 {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.key.black[data-note="C#4"] { left: 32px; }
-.key.black[data-note="D#4"] { left: 77px; }
-.key.black[data-note="F#4"] { left: 167px; }
-.key.black[data-note="G#4"] { left: 212px; }
-.key.black[data-note="A#4"] { left: 257px; }
-.key.black[data-note="C#5"] { left: 347px; }
-.key.black[data-note="D#5"] { left: 392px; }
-.key.black[data-note="F#5"] { left: 482px; }
-.key.black[data-note="G#5"] { left: 527px; }
-.key.black[data-note="A#5"] { left: 572px; }
+.key.black[data-note="C#4"] { left: 30px; }
+.key.black[data-note="D#4"] { left: 74px; }
+.key.black[data-note="F#4"] { left: 162px; }
+.key.black[data-note="G#4"] { left: 206px; }
+.key.black[data-note="A#4"] { left: 250px; }
+.key.black[data-note="C#5"] { left: 338px; }
+.key.black[data-note="D#5"] { left: 382px; }
+.key.black[data-note="F#5"] { left: 470px; }
+.key.black[data-note="G#5"] { left: 514px; }
+.key.black[data-note="A#5"] { left: 558px; }
 
 .key.correct {
     background: linear-gradient(to bottom, #4CAF50 0%, #45a049 100%) !important;
@@ -226,6 +228,43 @@ h1 {
     cursor: not-allowed;
     box-shadow: none;
     transform: none;
+}
+
+/* Animations */
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 5px #667eea, 0 0 10px #667eea, 0 0 15px #667eea;
+    }
+    50% {
+        box-shadow: 0 0 10px #764ba2, 0 0 20px #764ba2, 0 0 30px #764ba2;
+    }
+    100% {
+        box-shadow: 0 0 5px #667eea, 0 0 10px #667eea, 0 0 15px #667eea;
+    }
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); }
+    20%, 40%, 60%, 80% { transform: translateX(2px); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.key.glowing {
+    animation: glow 2s ease-in-out infinite;
+}
+
+.key.shake {
+    animation: shake 0.5s ease-in-out;
+}
+
+.key.pulse {
+    animation: pulse 0.3s ease;
 }
 
 @media (max-width: 768px) {
