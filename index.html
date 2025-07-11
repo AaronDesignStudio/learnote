@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Musical Note Recognition Game</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <h1>Note Recognition Game</h1>
+        
+        <div class="game-card">
+            <div class="score-display">
+                <span>Score: <span id="score">0</span></span>
+                <span>Streak: <span id="streak">0</span></span>
+            </div>
+            
+            <div class="notation-container">
+                <div id="notation"></div>
+            </div>
+            
+            <div class="feedback" id="feedback"></div>
+            
+            <div class="piano-container">
+                <div class="piano" id="piano">
+                    <div class="key white" data-note="C4">C</div>
+                    <div class="key black" data-note="C#4">C#</div>
+                    <div class="key white" data-note="D4">D</div>
+                    <div class="key black" data-note="D#4">D#</div>
+                    <div class="key white" data-note="E4">E</div>
+                    <div class="key white" data-note="F4">F</div>
+                    <div class="key black" data-note="F#4">F#</div>
+                    <div class="key white" data-note="G4">G</div>
+                    <div class="key black" data-note="G#4">G#</div>
+                    <div class="key white" data-note="A4">A</div>
+                    <div class="key black" data-note="A#4">A#</div>
+                    <div class="key white" data-note="B4">B</div>
+                    <div class="key white" data-note="C5">C</div>
+                    <div class="key black" data-note="C#5">C#</div>
+                    <div class="key white" data-note="D5">D</div>
+                    <div class="key black" data-note="D#5">D#</div>
+                    <div class="key white" data-note="E5">E</div>
+                    <div class="key white" data-note="F5">F</div>
+                    <div class="key black" data-note="F#5">F#</div>
+                    <div class="key white" data-note="G5">G</div>
+                    <div class="key black" data-note="G#5">G#</div>
+                    <div class="key white" data-note="A5">A</div>
+                    <div class="key black" data-note="A#5">A#</div>
+                    <div class="key white" data-note="B5">B</div>
+                    <div class="key white" data-note="C6">C</div>
+                </div>
+            </div>
+            
+            <button class="next-button" id="nextButton">Next Note</button>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/abcjs@6.2.2/dist/abcjs-basic-min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
