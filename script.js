@@ -96,6 +96,9 @@ K:C clef=treble
             wrapper.style.width = '100%';
             wrapper.style.display = 'flex';
             wrapper.style.justifyContent = 'center';
+            wrapper.style.background = '#ffffff';
+            wrapper.style.borderRadius = '10px';
+            wrapper.style.padding = '20px';
             div.appendChild(wrapper);
             
             // Render the notation
