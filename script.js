@@ -6,17 +6,32 @@ class NoteRecognitionGame {
         this.isWaitingForAnswer = true;
         this.incorrectAttempts = 0;
         
-        this.notes = [
-            'C4', 'D4', 'E4', 'F4', 'G4', 'A4', 'B4',
-            'C5', 'D5', 'E5', 'F5', 'G5', 'A5', 'B5',
+        // All available notes including sharps
+        this.allNotes = [
+            // Octave 2
+            'C2', 'C#2', 'D2', 'D#2', 'E2', 'F2', 'F#2', 'G2', 'G#2', 'A2', 'A#2', 'B2',
+            // Octave 3
+            'C3', 'C#3', 'D3', 'D#3', 'E3', 'F3', 'F#3', 'G3', 'G#3', 'A3', 'A#3', 'B3',
+            // Octave 4 (Middle C)
+            'C4', 'C#4', 'D4', 'D#4', 'E4', 'F4', 'F#4', 'G4', 'G#4', 'A4', 'A#4', 'B4',
+            // Octave 5
+            'C5', 'C#5', 'D5', 'D#5', 'E5', 'F5', 'F#5', 'G5', 'G#5', 'A5', 'A#5', 'B5',
+            // C6
             'C6'
         ];
+        
+        // Natural notes only (no sharps)
+        this.naturalNotes = this.allNotes.filter(note => !note.includes('#'));
+        
+        // Active notes for practice (filtered based on user selection)
+        this.notes = [...this.naturalNotes];
         
         this.init();
     }
     
     init() {
         this.setupEventListeners();
+        this.updateRange(); // Initialize with default range
         this.generateNewNote();
     }
     
@@ -26,9 +41,11 @@ class NoteRecognitionGame {
             key.addEventListener('click', (e) => this.handleKeyClick(e));
         });
         
-        document.getElementById('nextButton').addEventListener('click', () => {
-            this.generateNewNote();
-        });
+        // Range selector event listeners
+        document.getElementById('startNote').addEventListener('change', () => this.updateRange());
+        document.getElementById('endNote').addEventListener('change', () => this.updateRange());
+        document.getElementById('includeSharps').addEventListener('change', () => this.updateRange());
+        
     }
     
     generateNewNote() {
@@ -37,7 +54,6 @@ class NoteRecognitionGame {
         this.removeHints();
         this.isWaitingForAnswer = true;
         this.incorrectAttempts = 0;
-        document.getElementById('nextButton').disabled = true;
         
         const randomIndex = Math.floor(Math.random() * this.notes.length);
         this.currentNote = this.notes[randomIndex];
@@ -147,7 +163,6 @@ ${abcNote}4`;
         if (isCorrect) {
             this.updateScore(true);
             this.isWaitingForAnswer = false;
-            document.getElementById('nextButton').disabled = false;
             
             // Auto advance to next note if correct
             setTimeout(() => {
@@ -243,6 +258,54 @@ ${abcNote}4`;
         allKeys.forEach(key => {
             key.classList.remove('hint');
         });
+    }
+    
+    updateRange() {
+        const startNote = document.getElementById('startNote').value;
+        const endNote = document.getElementById('endNote').value;
+        const includeSharps = document.getElementById('includeSharps').checked;
+        
+        // Get the octave numbers
+        const startOctave = parseInt(startNote.slice(-1));
+        const endOctave = parseInt(endNote.slice(-1));
+        
+        // Validate range
+        if (startOctave > endOctave) {
+            alert('Start note must be lower than or equal to end note');
+            // Reset to valid values
+            document.getElementById('startNote').value = 'C4';
+            document.getElementById('endNote').value = 'C5';
+            return;
+        }
+        
+        // Get all notes to use (natural or including sharps)
+        const availableNotes = includeSharps ? this.allNotes : this.naturalNotes;
+        
+        // Filter notes within the selected range
+        this.notes = availableNotes.filter(note => {
+            const noteOctave = parseInt(note.slice(-1));
+            const noteName = note.slice(0, -1);
+            
+            // Handle exact octave boundaries
+            if (noteOctave === startOctave && noteOctave === endOctave) {
+                // Both start and end in same octave
+                return noteName >= startNote.slice(0, -1) && noteName <= endNote.slice(0, -1);
+            } else if (noteOctave === startOctave) {
+                // In start octave
+                return noteName >= startNote.slice(0, -1);
+            } else if (noteOctave === endOctave) {
+                // In end octave
+                return noteName <= endNote.slice(0, -1);
+            } else {
+                // In between octaves
+                return noteOctave > startOctave && noteOctave < endOctave;
+            }
+        });
+        
+        // If we have an active game, generate a new note with the updated range
+        if (this.currentNote) {
+            this.generateNewNote();
+        }
     }
 }
 

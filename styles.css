@@ -17,7 +17,7 @@ body {
 
 .game-container {
     width: 100%;
-    max-width: 900px;
+    max-width: 1400px;
 }
 
 h1 {
@@ -35,12 +35,14 @@ h1 {
     padding: 40px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     border: 1px solid #3a3a3a;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .score-display {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
     font-size: 18px;
     color: #999;
 }
@@ -52,6 +54,74 @@ h1 {
 #score, #streak {
     color: #4CAF50;
     font-weight: 500;
+}
+
+/* Range Selector Styles */
+.range-selector {
+    background: #1f1f1f;
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 1px solid #3a3a3a;
+}
+
+.range-selector h3 {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 400;
+    margin-bottom: 15px;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.range-controls {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.control-group label {
+    color: #999;
+    font-size: 14px;
+    font-weight: 300;
+}
+
+.control-group select {
+    background: #2a2a2a;
+    color: #ffffff;
+    border: 1px solid #3a3a3a;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.control-group select:hover {
+    background: #333333;
+    border-color: #4a4a4a;
+}
+
+.control-group select:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+}
+
+.control-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: #667eea;
 }
 
 .notation-container {
@@ -107,20 +177,21 @@ h1 {
 
 .piano-container {
     margin-bottom: 40px;
-    overflow-x: auto;
+    overflow: visible;
     padding: 20px;
     background: #1f1f1f;
     border-radius: 15px;
     border: 1px solid #3a3a3a;
+    max-width: 100%;
 }
 
 .piano {
     display: flex;
     position: relative;
-    width: fit-content;
-    margin: 0 auto;
+    width: 100%;
     height: 160px;
     padding-top: 0;
+    justify-content: center;
 }
 
 .key {
@@ -136,7 +207,9 @@ h1 {
 }
 
 .key.white {
-    width: 42px;
+    width: calc((100% - 58px) / 29);
+    min-width: 25px;
+    max-width: 50px;
     height: 100%;
     background: linear-gradient(to bottom, #ffffff 0%, #fafafa 100%);
     border: 1px solid #d0d0d0;
@@ -145,6 +218,7 @@ h1 {
     padding-bottom: 12px;
     margin: 0 1px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    font-size: 10px;
 }
 
 .key.white:hover {
@@ -158,7 +232,9 @@ h1 {
 }
 
 .key.black {
-    width: 28px;
+    width: calc((100% - 58px) / 29 * 0.65);
+    min-width: 18px;
+    max-width: 32px;
     height: 100px;
     background: linear-gradient(to bottom, #333333 0%, #000000 100%);
     border-radius: 0 0 4px 4px;
@@ -169,6 +245,10 @@ h1 {
     padding-bottom: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     border: 1px solid #000;
+    font-size: 9px;
+    --white-key-width: calc((100% - 58px) / 29);
+    --white-key-total: calc(var(--white-key-width) + 2px);
+    --black-key-offset: calc(var(--white-key-width) * 0.675);
 }
 
 .key.black:hover {
@@ -181,16 +261,41 @@ h1 {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.key.black[data-note="C#4"] { left: 30px; }
-.key.black[data-note="D#4"] { left: 74px; }
-.key.black[data-note="F#4"] { left: 162px; }
-.key.black[data-note="G#4"] { left: 206px; }
-.key.black[data-note="A#4"] { left: 250px; }
-.key.black[data-note="C#5"] { left: 338px; }
-.key.black[data-note="D#5"] { left: 382px; }
-.key.black[data-note="F#5"] { left: 470px; }
-.key.black[data-note="G#5"] { left: 514px; }
-.key.black[data-note="A#5"] { left: 558px; }
+/* Black key positioning calculations:
+ * - White key width: calc((100% - 58px) / 29)
+ * - White key margin: 1px each side (2px total per key)
+ * - Black keys positioned at the boundary between white keys
+ * - Position = (white_key_index * (key_width + 2px)) + key_width - black_key_width/2
+ */
+
+
+/* Octave 2 - White keys 0-6 */
+.key.black[data-note="C#2"] { left: calc(var(--white-key-total) * 0 + var(--black-key-offset)); }  /* Between C2(0) and D2(1) */
+.key.black[data-note="D#2"] { left: calc(var(--white-key-total) * 1 + var(--black-key-offset)); }  /* Between D2(1) and E2(2) */
+.key.black[data-note="F#2"] { left: calc(var(--white-key-total) * 3 + var(--black-key-offset)); }  /* Between F2(3) and G2(4) */
+.key.black[data-note="G#2"] { left: calc(var(--white-key-total) * 4 + var(--black-key-offset)); }  /* Between G2(4) and A2(5) */
+.key.black[data-note="A#2"] { left: calc(var(--white-key-total) * 5 + var(--black-key-offset)); }  /* Between A2(5) and B2(6) */
+
+/* Octave 3 - White keys 7-13 */
+.key.black[data-note="C#3"] { left: calc(var(--white-key-total) * 7 + var(--black-key-offset)); }   /* Between C3(7) and D3(8) */
+.key.black[data-note="D#3"] { left: calc(var(--white-key-total) * 8 + var(--black-key-offset)); }   /* Between D3(8) and E3(9) */
+.key.black[data-note="F#3"] { left: calc(var(--white-key-total) * 10 + var(--black-key-offset)); }  /* Between F3(10) and G3(11) */
+.key.black[data-note="G#3"] { left: calc(var(--white-key-total) * 11 + var(--black-key-offset)); }  /* Between G3(11) and A3(12) */
+.key.black[data-note="A#3"] { left: calc(var(--white-key-total) * 12 + var(--black-key-offset)); }  /* Between A3(12) and B3(13) */
+
+/* Octave 4 - White keys 14-20 */
+.key.black[data-note="C#4"] { left: calc(var(--white-key-total) * 14 + var(--black-key-offset)); }  /* Between C4(14) and D4(15) */
+.key.black[data-note="D#4"] { left: calc(var(--white-key-total) * 15 + var(--black-key-offset)); }  /* Between D4(15) and E4(16) */
+.key.black[data-note="F#4"] { left: calc(var(--white-key-total) * 17 + var(--black-key-offset)); }  /* Between F4(17) and G4(18) */
+.key.black[data-note="G#4"] { left: calc(var(--white-key-total) * 18 + var(--black-key-offset)); }  /* Between G4(18) and A4(19) */
+.key.black[data-note="A#4"] { left: calc(var(--white-key-total) * 19 + var(--black-key-offset)); }  /* Between A4(19) and B4(20) */
+
+/* Octave 5 - White keys 21-27 */
+.key.black[data-note="C#5"] { left: calc(var(--white-key-total) * 21 + var(--black-key-offset)); }  /* Between C5(21) and D5(22) */
+.key.black[data-note="D#5"] { left: calc(var(--white-key-total) * 22 + var(--black-key-offset)); }  /* Between D5(22) and E5(23) */
+.key.black[data-note="F#5"] { left: calc(var(--white-key-total) * 24 + var(--black-key-offset)); }  /* Between F5(24) and G5(25) */
+.key.black[data-note="G#5"] { left: calc(var(--white-key-total) * 25 + var(--black-key-offset)); }  /* Between G5(25) and A5(26) */
+.key.black[data-note="A#5"] { left: calc(var(--white-key-total) * 26 + var(--black-key-offset)); }  /* Between A5(26) and B5(27) */
 
 .key.correct {
     background: linear-gradient(to bottom, #4CAF50 0%, #45a049 100%) !important;
@@ -202,34 +307,6 @@ h1 {
     color: white !important;
 }
 
-.next-button {
-    display: block;
-    margin: 0 auto;
-    padding: 14px 40px;
-    font-size: 16px;
-    font-weight: 500;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    border-radius: 30px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-}
-
-.next-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
-}
-
-.next-button:disabled {
-    background: #444;
-    cursor: not-allowed;
-    box-shadow: none;
-    transform: none;
-}
 
 /* Animations */
 @keyframes glow {
@@ -288,25 +365,46 @@ h1 {
     z-index: 3;
 }
 
+/* Middle C indicator */
+.key.middle-c {
+    position: relative;
+}
+
+.key.middle-c::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    width: 8px;
+    height: 8px;
+    background-color: #ff0000;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+
 @media (max-width: 768px) {
     .key.white {
-        width: 35px;
-        height: 120px;
+        min-width: 15px;
+        height: 100px;
+        font-size: 8px;
     }
     
     .key.black {
-        width: 25px;
-        height: 80px;
+        min-width: 10px;
+        height: 70px;
+        font-size: 7px;
     }
     
-    .key.black[data-note="C#4"] { left: 26px; }
-    .key.black[data-note="D#4"] { left: 63px; }
-    .key.black[data-note="F#4"] { left: 137px; }
-    .key.black[data-note="G#4"] { left: 174px; }
-    .key.black[data-note="A#4"] { left: 211px; }
-    .key.black[data-note="C#5"] { left: 285px; }
-    .key.black[data-note="D#5"] { left: 322px; }
-    .key.black[data-note="F#5"] { left: 396px; }
-    .key.black[data-note="G#5"] { left: 433px; }
-    .key.black[data-note="A#5"] { left: 470px; }
+    .piano {
+        height: 120px;
+    }
+    
+    
+    .key.middle-c::before {
+        width: 6px;
+        height: 6px;
+        top: 6px;
+        left: 6px;
+    }
 }

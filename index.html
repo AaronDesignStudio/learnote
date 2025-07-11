@@ -16,6 +16,36 @@
                 <span>Streak: <span id="streak">0</span></span>
             </div>
             
+            <div class="range-selector">
+                <h3>Practice Range</h3>
+                <div class="range-controls">
+                    <div class="control-group">
+                        <label for="startNote">From:</label>
+                        <select id="startNote">
+                            <option value="C2">C2</option>
+                            <option value="C3">C3</option>
+                            <option value="C4" selected>C4</option>
+                            <option value="C5">C5</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="endNote">To:</label>
+                        <select id="endNote">
+                            <option value="C3">C3</option>
+                            <option value="C4">C4</option>
+                            <option value="C5" selected>C5</option>
+                            <option value="C6">C6</option>
+                        </select>
+                    </div>
+                    <div class="control-group">
+                        <label for="includeSharps">
+                            <input type="checkbox" id="includeSharps">
+                            Include sharps/flats
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
             <div class="notation-container">
                 <div id="notation"></div>
             </div>
@@ -24,7 +54,34 @@
             
             <div class="piano-container">
                 <div class="piano" id="piano">
-                    <div class="key white" data-note="C4">C</div>
+                    <!-- Octave 2 -->
+                    <div class="key white" data-note="C2">C</div>
+                    <div class="key black" data-note="C#2">C#</div>
+                    <div class="key white" data-note="D2">D</div>
+                    <div class="key black" data-note="D#2">D#</div>
+                    <div class="key white" data-note="E2">E</div>
+                    <div class="key white" data-note="F2">F</div>
+                    <div class="key black" data-note="F#2">F#</div>
+                    <div class="key white" data-note="G2">G</div>
+                    <div class="key black" data-note="G#2">G#</div>
+                    <div class="key white" data-note="A2">A</div>
+                    <div class="key black" data-note="A#2">A#</div>
+                    <div class="key white" data-note="B2">B</div>
+                    <!-- Octave 3 -->
+                    <div class="key white" data-note="C3">C</div>
+                    <div class="key black" data-note="C#3">C#</div>
+                    <div class="key white" data-note="D3">D</div>
+                    <div class="key black" data-note="D#3">D#</div>
+                    <div class="key white" data-note="E3">E</div>
+                    <div class="key white" data-note="F3">F</div>
+                    <div class="key black" data-note="F#3">F#</div>
+                    <div class="key white" data-note="G3">G</div>
+                    <div class="key black" data-note="G#3">G#</div>
+                    <div class="key white" data-note="A3">A</div>
+                    <div class="key black" data-note="A#3">A#</div>
+                    <div class="key white" data-note="B3">B</div>
+                    <!-- Octave 4 (Middle C) -->
+                    <div class="key white middle-c" data-note="C4">C</div>
                     <div class="key black" data-note="C#4">C#</div>
                     <div class="key white" data-note="D4">D</div>
                     <div class="key black" data-note="D#4">D#</div>
@@ -36,6 +93,7 @@
                     <div class="key white" data-note="A4">A</div>
                     <div class="key black" data-note="A#4">A#</div>
                     <div class="key white" data-note="B4">B</div>
+                    <!-- Octave 5 -->
                     <div class="key white" data-note="C5">C</div>
                     <div class="key black" data-note="C#5">C#</div>
                     <div class="key white" data-note="D5">D</div>
@@ -52,7 +110,6 @@
                 </div>
             </div>
             
-            <button class="next-button" id="nextButton">Next Note</button>
         </div>
     </div>
     
