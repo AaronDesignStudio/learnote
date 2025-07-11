@@ -84,32 +84,36 @@ class NoteRecognitionGame {
             
             // Create ABC notation string with minimal staff
             const abcNotation = `X:1
-M:4/4
 L:1/4
 K:C clef=treble
-|${abcNote}4|`;
+${abcNote}4`;
             
             console.log('Displaying note:', note, 'as ABC:', abcNote);
             
             // Create a wrapper div for better centering
             const wrapper = document.createElement('div');
-            wrapper.style.width = '100%';
+            wrapper.style.width = 'fit-content';
             wrapper.style.display = 'flex';
             wrapper.style.justifyContent = 'center';
+            wrapper.style.alignItems = 'center';
             wrapper.style.background = '#ffffff';
             wrapper.style.borderRadius = '10px';
-            wrapper.style.padding = '20px';
+            wrapper.style.padding = '30px 40px';
+            wrapper.style.margin = '0 auto';
             div.appendChild(wrapper);
             
             // Render the notation
             ABCJS.renderAbc(wrapper, abcNotation, {
                 scale: 1.5,
-                staffwidth: 200,
-                paddingright: 0,
-                paddingleft: 0,
+                staffwidth: 180,
+                paddingright: 10,
+                paddingleft: 10,
                 paddingtop: 10,
                 paddingbottom: 10,
-                add_classes: true
+                add_classes: true,
+                foregroundColor: "#000000",
+                backgroundColor: "#ffffff",
+                viewportHorizontal: false
             });
             
         } catch (error) {
